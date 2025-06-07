@@ -1,0 +1,114 @@
+{
+  "questions": [
+    {
+      "id": 1,
+      "text": "Quel est le bloc le plus résistant de Minecraft ?",
+      "answers": [
+        { "id": 1, "text": "Le bedrock", "color": "red" },
+        { "id": 2, "text": "L'obsidienne", "color": "blue" },
+        { "id": 3, "text": "La pierre", "color": "yellow" },
+        { "id": 4, "text": "Le diamant", "color": "green" }
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 2,
+      "text": "Quel est le premier boss du jeu ?",
+      "answers": [
+        { "id": 1, "text": "Le Wither", "color": "red" },
+        { "id": 2, "text": "L'Ender Dragon", "color": "blue" },
+        { "id": 3, "text": "Le Gardien", "color": "yellow" },
+        { "id": 4, "text": "Le Warden", "color": "green" }
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 3,
+      "text": "Quelle est la hauteur maximale du monde dans Minecraft ?",
+      "answers": [
+        { "id": 1, "text": "256 blocs", "color": "red" },
+        { "id": 2, "text": "320 blocs", "color": "blue" },
+        { "id": 3, "text": "128 blocs", "color": "yellow" },
+        { "id": 4, "text": "512 blocs", "color": "green" }
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 4,
+      "text": "Quel est le matériau le plus rare du jeu ?",
+      "answers": [
+        { "id": 1, "text": "Le diamant", "color": "red" },
+        { "id": 2, "text": "L'émeraude", "color": "blue" },
+        { "id": 3, "text": "La netherite", "color": "yellow" },
+        { "id": 4, "text": "L'or", "color": "green" }
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "id": 5,
+      "text": "Quel est le nom du créateur de Minecraft ?",
+      "answers": [
+        { "id": 1, "text": "Markus Persson", "color": "red" },
+        { "id": 2, "text": "Jens Bergensten", "color": "blue" },
+        { "id": 3, "text": "Notch", "color": "yellow" },
+        { "id": 4, "text": "Herobrine", "color": "green" }
+      ],
+      "correctAnswer": 1
+    },
+    {
+      "id": 6,
+      "text": "Quelle est la dimension alternative accessible via le portail du Nether ?",
+      "answers": [
+        { "id": 1, "text": "L'End", "color": "red" },
+        { "id": 2, "text": "Le Nether", "color": "blue" },
+        { "id": 3, "text": "L'Overworld", "color": "yellow" },
+        { "id": 4, "text": "L'Aether", "color": "green" }
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 7,
+      "text": "Quel est le seul bloc qui ne peut pas être poussé par un piston ?",
+      "answers": [
+        { "id": 1, "text": "L'obsidienne", "color": "red" },
+        { "id": 2, "text": "Le bedrock", "color": "blue" },
+        { "id": 3, "text": "La barrière", "color": "yellow" },
+        { "id": 4, "text": "Le spawner", "color": "green" }
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 8,
+      "text": "Quel est le nom du premier mob hostile du jeu ?",
+      "answers": [
+        { "id": 1, "text": "Le zombie", "color": "red" },
+        { "id": 2, "text": "Le creeper", "color": "blue" },
+        { "id": 3, "text": "Le squelette", "color": "yellow" },
+        { "id": 4, "text": "L'araignée", "color": "green" }
+      ],
+      "correctAnswer": 2
+    },
+    {
+      "id": 9,
+      "text": "Quelle est la recette pour créer un portail vers l'End ?",
+      "answers": [
+        { "id": 1, "text": "12 yeux d'ender", "color": "red" },
+        { "id": 2, "text": "4 yeux d'ender", "color": "blue" },
+        { "id": 3, "text": "8 yeux d'ender", "color": "yellow" },
+        { "id": 4, "text": "16 yeux d'ender", "color": "green" }
+      ],
+      "correctAnswer": 3
+    },
+    {
+      "id": 10,
+      "text": "Quel est le seul enchantement qui ne peut pas être combiné avec les autres ?",
+      "answers": [
+        { "id": 1, "text": "Tranchant", "color": "red" },
+        { "id": 2, "text": "Protection", "color": "blue" },
+        { "id": 3, "text": "Malediction de disparition", "color": "yellow" },
+        { "id": 4, "text": "Solidité", "color": "green" }
+      ],
+      "correctAnswer": 3
+    }
+  ]
+}
