@@ -408,7 +408,9 @@ def handle_player_answer(data):
                 rooms[room_id]['scoreboard'][player_sid] = (rooms[room_id]['scoreboard'][player_sid] or 0)
 
         emit('all_players_answered', {
-            'scoreboard': rooms[room_id]['scoreboard']
+            'scoreboard': rooms[room_id]['scoreboard'],
+            'correct_answer': correct_answer,
+            'current_question': rooms[room_id]['selected_quiz']['questions'][rooms[room_id]['current_question']]
         }, room=room_id)
         
         # Réinitialiser les réponses pour la prochaine question

@@ -136,6 +136,8 @@ const QuizzClient = () => {
   const [players, setPlayers] = useState<Array<{ sid: string; name: string }>>(
     []
   );
+  const [correctAnswer, setCorrectAnswer] = useState<string>("");
+  const [questionData, setQuestionData] = useState<any>(null);
 
   useEffect(() => {
     const updateSocketId = () => {
@@ -195,8 +197,14 @@ const QuizzClient = () => {
       setPlayers(data.players || []);
     });
 
-    socket.on("all_players_answered", (data: { scoreboard: { [key: string]: number } }) => {
+    socket.on("all_players_answered", (data: { 
+      scoreboard: { [key: string]: number };
+      correct_answer: string;
+      current_question: any;
+    }) => {
       setScores(data.scoreboard);
+      setCorrectAnswer(data.correct_answer);
+      setQuestionData(data.current_question);
       setCurrentView("scoreboard");
       console.log(data.scoreboard);
       console.log("Is Host (from ref):", isHostRef.current);
@@ -206,6 +214,8 @@ const QuizzClient = () => {
       setCurrentView("quiz");
       setSelectedColor(null);
       setCurrentQuestion((prev) => prev + 1);
+      setCorrectAnswer("");
+      setQuestionData(null);
     });
 
     socket.on("quiz_finished", () => {
@@ -439,6 +449,49 @@ const QuizzClient = () => {
               📊 Scores
             </Typography>
           </Fade>
+          
+          {/* Affichage de la bonne réponse */}
+          {correctAnswer && questionData && (
+            <Slide direction="down" in timeout={1200}>
+              <Paper 
+                sx={{ 
+                  p: 3, 
+                  width: "100%", 
+                  maxWidth: 600,
+                  background: "rgba(76, 175, 80, 0.95)",
+                  backdropFilter: "blur(10px)",
+                  borderRadius: 3,
+                  boxShadow: "0 8px 32px rgba(76, 175, 80, 0.3)",
+                  mb: 3,
+                  border: "2px solid rgba(255,255,255,0.3)",
+                }}
+              >
+                <Box sx={{ textAlign: "center" }}>
+                  <Typography 
+                    variant="h6" 
+                    sx={{ 
+                      color: "white", 
+                      mb: 2,
+                      fontWeight: "bold",
+                      textShadow: "1px 1px 4px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    Question : {questionData.question}
+                  </Typography>
+                  <Typography 
+                    variant="h5" 
+                    sx={{ 
+                      color: "white",
+                      fontWeight: "bold",
+                      textShadow: "1px 1px 4px rgba(0,0,0,0.3)",
+                    }}
+                  >
+                    ✅ Bonne réponse : {correctAnswer}
+                  </Typography>
+                </Box>
+              </Paper>
+            </Slide>
+          )}
           
           <Slide direction="up" in timeout={1000}>
             <Paper 
