@@ -10,6 +10,7 @@ import QuizzHost from "./pages/QuizzHost";
 import QuizzClient from "./pages/QuizzClient";
 import LobbyGame from "./pages/LobbyGame";
 import io from "socket.io-client";
+import { Box } from "@mui/material";
 
 // Configuration de l'URL du serveur Socket.IO
 export const SOCKET_URL = "http://127.0.0.1:3000";
@@ -76,6 +77,12 @@ const LobbyGameWrapper = () => {
     window.location.href = `/quiz/${roomId}`;
   };
 
+  const handleViewChange = (view: "lobby" | "quiz") => {
+    if (view === "quiz") {
+      window.location.href = `/quiz/${roomId}`;
+    }
+  };
+
   return (
     <LobbyGame
       isOwner={isOwner}
@@ -85,6 +92,7 @@ const LobbyGameWrapper = () => {
       onKickPlayer={handleKickPlayer}
       onUpdateSettings={handleUpdateSettings}
       onGameStart={handleGameStart}
+      onViewChange={handleViewChange}
     />
   );
 };
@@ -92,7 +100,8 @@ const LobbyGameWrapper = () => {
 function App() {
   return (
     <Router>
-      <Routes>
+      <Routes
+      >
         <Route path="/" element={<Lobby />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/lobby/:roomId" element={<Lobby />} />

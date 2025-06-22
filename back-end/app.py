@@ -62,7 +62,21 @@ available_quizzes = [
                 'options': ['Lyon', 'Paris', 'Marseille', 'Bordeaux'],
                 'correctAnswer': 1
             },
-            # Ajoutez plus de questions ici
+            {
+                'question': 'Quel est le plus grand océan du monde ?',
+                'options': ['Océan Atlantique', 'Océan Pacifique', 'Océan Indien', 'Océan Arctique'],
+                'correctAnswer': 1
+            },
+            {
+                'question': 'Combien de planètes y a-t-il dans notre système solaire ?',
+                'options': ['7', '8', '9', '10'],
+                'correctAnswer': 1
+            },
+            {
+                'question': 'Quel est le plus grand désert du monde ?',
+                'options': ['Désert du Sahara', 'Désert d\'Arabie', 'Désert de Gobi', 'Désert d\'Antarctique'],
+                'correctAnswer': 0
+            }
         ]
     },
     {
@@ -75,7 +89,26 @@ available_quizzes = [
                 'options': ['1789', '1792', '1799', '1804'],
                 'correctAnswer': 0
             },
-            # Ajoutez plus de questions ici
+            {
+                'question': 'En quelle année s\'est déroulée la bataille de Waterloo ?',
+                'options': ['1815', '1812', '1805', '1800'],
+                'correctAnswer': 0
+            },
+            {
+                'question': 'Qui était le premier empereur romain ?',
+                'options': ['Jules César', 'Auguste', 'Néron', 'Caligula'],
+                'correctAnswer': 1
+            },
+            {
+                'question': 'En quelle année Christophe Colomb a-t-il découvert l\'Amérique ?',
+                'options': ['1492', '1498', '1500', '1502'],
+                'correctAnswer': 0
+            },
+            {
+                'question': 'Quel roi de France était surnommé le Roi Soleil ?',
+                'options': ['Louis XIII', 'Louis XIV', 'Louis XV', 'Louis XVI'],
+                'correctAnswer': 1
+            }
         ]
     }
 ]
@@ -391,13 +424,6 @@ def handle_player_answer(data):
     start_time = rooms[room_id].get('start_time', current_time)
     response_time = current_time - start_time
     
-    if response_time > rooms[room_id]['settings']['responseTime']:
-        logger.error(f"ERREUR: Temps de réponse dépassé pour le joueur {request.sid}")
-        emit('answer_timeout', {
-            'message': 'Temps de réponse dépassé'
-        }, room=request.sid)
-        return
-    
     if room_id not in player_answers:
         player_answers[room_id] = {}
     
@@ -415,15 +441,35 @@ def handle_player_answer(data):
             'player_name': player_name
         }
     
+
     all_players = [p['sid'] for p in rooms[room_id]['players']]
     
     logger.info(f"RÉPONSE: Player answers: {player_answers[room_id]}")
     logger.info(f"RÉPONSE: All players: {all_players}")
     
+
     if all(player_sid in player_answers[room_id] for player_sid in all_players) and len(all_players) > 0:
         logger.info(f"RÉPONSE: Tous les joueurs ont répondu, passage à la question suivante")
+        
+        if 'scoreboard' not in rooms[room_id]:
+            rooms[room_id]['scoreboard'] = {}
+        
+        for player_sid, answer in player_answers[room_id].items():
+            if player_sid not in rooms[room_id]['scoreboard']:
+                rooms[room_id]['scoreboard'][player_sid] = 0 
+            player_answer = answer['answer']
+            correct_answer = rooms[room_id]['selected_quiz']['questions'][rooms[room_id]['current_question']]['options'][rooms[room_id]['selected_quiz']['questions'][rooms[room_id]['current_question']]['correctAnswer']]
+
+            print(player_answer)
+            print(correct_answer)
+           
+            if player_answer == correct_answer:
+                rooms[room_id]['scoreboard'][player_sid] = (rooms[room_id]['scoreboard'][player_sid] or 0) + 1
+            else:
+                rooms[room_id]['scoreboard'][player_sid] = (rooms[room_id]['scoreboard'][player_sid] or 0)
+
         emit('all_players_answered', {
-            'answers': player_answers[room_id]
+            'scoreboard': rooms[room_id]['scoreboard']
         }, room=room_id)
         
         # Réinitialiser les réponses pour la prochaine question
@@ -439,10 +485,6 @@ def handle_player_answer(data):
                 'message': 'Quiz terminé'
             }, room=room_id)
             rooms[room_id]['status'] = 'finished'
-        else:
-            emit('next_question', {
-                'question': rooms[room_id]['selected_quiz']['questions'][rooms[room_id]['current_question']]
-            }, room=room_id)
 
 @socketio.on('room_info_updated')
 def handle_room_info_updated(data):
@@ -456,6 +498,12 @@ def handle_room_info_updated(data):
             'selected_quiz': data['selected_quiz'],
             'is_owner': request.sid == rooms[room_id]['host_sid']
         }, room=room_id)
+
+@socketio.on('start_next_question')
+def handle_start_next_question(data):
+    room_id = data['room_id']
+    if room_id in rooms and request.sid == rooms[room_id]['host_sid']:
+        emit('next_question', room=room_id)
 
 @socketio.on('next_question')
 def handle_next_question(data):

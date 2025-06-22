@@ -5,11 +5,84 @@ import {
   Button,
   CircularProgress,
   Paper,
+  Fade,
+  Slide,
+  Zoom,
+  Grow,
+  Chip,
+  Avatar,
+  LinearProgress,
 } from "@mui/material";
-import { useState, useEffect } from "react";
-import { useParams } from "react-router-dom";
+import { useState, useEffect, useRef } from "react";
+import { useParams, useNavigate } from "react-router-dom";
 import socket from "../socket";
 import axios from "axios";
+import Podium from "./Podium";
+import { styled } from "@mui/material/styles";
+
+// Composants stylisés
+const StyledCard = styled(Card)(({ theme }) => ({
+  cursor: "pointer",
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  position: "relative",
+  overflow: "hidden",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
+  },
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+    zIndex: 1,
+  },
+}));
+
+const GradientBackground = styled(Box)(({ theme }) => ({
+  background: "linear-gradient(135deg, #667eea 0%, #764ba2 100%)",
+  minHeight: "100vh",
+  position: "relative",
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"10\" cy=\"60\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"90\" cy=\"40\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>')",
+    opacity: 0.3,
+  },
+}));
+
+const AnswerCard = styled(Card)<{ selected?: boolean }>(({ theme, selected }) => ({
+  background: selected ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
+  backdropFilter: "blur(10px)",
+  border: selected ? "2px solid rgba(255,255,255,0.8)" : "1px solid rgba(255,255,255,0.2)",
+  cursor: "pointer",
+  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+  position: "relative",
+  overflow: "hidden",
+  "&:hover": {
+    transform: "scale(1.05)",
+    boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
+    background: "rgba(255,255,255,0.15)",
+    border: "2px solid rgba(255,255,255,0.6)",
+  },
+  "&::before": {
+    content: '""',
+    position: "absolute",
+    top: 0,
+    left: 0,
+    right: 0,
+    bottom: 0,
+    background: "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+    zIndex: 1,
+  },
+}));
 
 interface Quiz {
   id: string;
@@ -45,17 +118,41 @@ type View = "loading" | "lobby" | "quiz" | "scoreboard" | "finished";
 
 const QuizzClient = () => {
   const { roomId } = useParams();
+  const navigate = useNavigate();
   const [selectedColor, setSelectedColor] = useState<string | null>(null);
   const [quiz, setQuiz] = useState<Quiz | null>(null);
   const [isLoading, setIsLoading] = useState(true);
   const [currentQuestion, setCurrentQuestion] = useState(0);
   const [currentView, setCurrentView] = useState<View>("loading");
-  const [playerAnswers, setPlayerAnswers] = useState<Answers>({});
   const [isHost, setIsHost] = useState(false);
+  const [showAnswerFeedback, setShowAnswerFeedback] = useState(false);
+  const socketIdRef = useRef<string | null>(null);
+  const isHostRef = useRef(false);
+  const [defaultTimer, setDefaultTimer] = useState<number>(15);
+  const [timeLeft, setTimeLeft] = useState<number>(defaultTimer);
+  const hasAnsweredRef = useRef(false);
+
   const [scores, setScores] = useState<{ [key: string]: number }>({});
   const [players, setPlayers] = useState<Array<{ sid: string; name: string }>>(
     []
   );
+
+  useEffect(() => {
+    const updateSocketId = () => {
+      socketIdRef.current = socket.id;
+    };
+    
+    updateSocketId();
+    socket.on('connect', updateSocketId);
+    
+    return () => {
+      socket.off('connect', updateSocketId);
+    };
+  }, []);
+
+  useEffect(() => {
+    isHostRef.current = isHost;
+  }, [isHost]);
 
   useEffect(() => {
     const fetchQuiz = async () => {
@@ -64,7 +161,9 @@ const QuizzClient = () => {
           `http://localhost:3000/api/rooms/${roomId}`
         );
         const selectedQuizId = roomResponse.data.selected_quiz?.id;
-        setIsHost(roomResponse.data.host.id === socket.id);
+        const currentSocketId = socketIdRef.current || socket.id;
+        const hostStatus = roomResponse.data.host.id === currentSocketId;
+        setIsHost(hostStatus);
         setPlayers(roomResponse.data.players || []);
 
         if (selectedQuizId) {
@@ -91,14 +190,16 @@ const QuizzClient = () => {
 
   useEffect(() => {
     socket.on("game_started", (data: GameStartedData) => {
+      setDefaultTimer(data.settings.responseTime);
       setCurrentView("quiz");
       setPlayers(data.players || []);
     });
 
-    socket.on("all_players_answered", (data: { answers: Answers }) => {
-      setPlayerAnswers(data.answers);
+    socket.on("all_players_answered", (data: { scoreboard: { [key: string]: number } }) => {
+      setScores(data.scoreboard);
       setCurrentView("scoreboard");
-      updateScores(data.answers);
+      console.log(data.scoreboard);
+      console.log("Is Host (from ref):", isHostRef.current);
     });
 
     socket.on("next_question", () => {
@@ -119,19 +220,43 @@ const QuizzClient = () => {
     };
   }, []);
 
-  const updateScores = (answers: Answers) => {
-    const newScores = { ...scores };
-    Object.entries(answers).forEach(([playerId, answer]) => {
-      const currentQuestionData = quiz?.questions[currentQuestion];
-      if (currentQuestionData) {
-        const isCorrect =
-          answer.answer ===
-          currentQuestionData.options[currentQuestionData.correctAnswer];
-        newScores[playerId] = (newScores[playerId] || 0) + (isCorrect ? 1 : 0);
-      }
-    });
-    setScores(newScores);
-  };
+  // Reset hasAnswered when question changes
+  useEffect(() => {
+    hasAnsweredRef.current = false;
+  }, [currentQuestion]);
+
+  // Timer effect
+  useEffect(() => {
+    if (currentView === "quiz" && !selectedColor && !hasAnsweredRef.current) {
+      const timer = setInterval(() => {
+        setTimeLeft((prev) => {
+          if (prev <= 1) {
+            clearInterval(timer);
+            // Envoyer automatiquement une réponse "default" quand le temps est écoulé
+            // Vérifier que selectedColor est toujours null pour éviter les doubles envois
+            if (socket && roomId && !selectedColor && !hasAnsweredRef.current) {
+              hasAnsweredRef.current = true;
+              socket.emit("player_answer", {
+                room_id: roomId,
+                answer: "default",
+              });
+              setSelectedColor("default");
+              setShowAnswerFeedback(true);
+            }
+            return 0;
+          }
+          return prev - 1;
+        });
+      }, 1000);
+
+      return () => clearInterval(timer);
+    }
+  }, [currentView, selectedColor, socket, roomId, isHost]);
+
+  // Reset timer when question changes
+  useEffect(() => {
+    setTimeLeft(defaultTimer);
+  }, [currentQuestion]);
 
   const handleStartGame = () => {
     if (roomId) {
@@ -139,14 +264,28 @@ const QuizzClient = () => {
     }
   };
 
+  const handleNextQuestion = () => {
+    if (roomId) {
+      socket.emit("start_next_question", { room_id: roomId });
+    }
+  };
+
   const handleAnswerClick = (color: string) => {
-    if (socket && roomId) {
+    if (socket && roomId && !selectedColor && !hasAnsweredRef.current) {
+      hasAnsweredRef.current = true;
       socket.emit("player_answer", {
         room_id: roomId,
         answer: color,
       });
       setSelectedColor(color);
+      setShowAnswerFeedback(true);
+      setTimeLeft(defaultTimer);
+      
     }
+  };
+
+  const handleReturnHome = () => {
+    navigate("/");
   };
 
   if (isLoading) {
@@ -181,86 +320,208 @@ const QuizzClient = () => {
 
   if (currentView === "lobby" && isHost) {
     return (
-      <Box
-        sx={{
-          display: "flex",
-          flexDirection: "column",
-          justifyContent: "center",
-          alignItems: "center",
-          height: "100vh",
-          gap: 2,
-        }}
-      >
-        <Typography variant="h4">Lobby</Typography>
-        <Typography>Joueurs connectés : {players.length}</Typography>
-        <Button variant="contained" onClick={handleStartGame} size="large">
-          Démarrer le quiz
-        </Button>
-      </Box>
+      <GradientBackground>
+        <Box
+          sx={{
+            display: "flex",
+            flexDirection: "column",
+            justifyContent: "center",
+            alignItems: "center",
+            height: "100vh",
+            gap: 4,
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          <Fade in timeout={1000}>
+            <Box sx={{ textAlign: "center" }}>
+              <Typography 
+                variant="h2" 
+                sx={{ 
+                  color: "white", 
+                  fontWeight: "bold",
+                  textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
+                  mb: 2
+                }}
+              >
+                🎮 Lobby
+              </Typography>
+              <Typography 
+                variant="h5" 
+                sx={{ 
+                  color: "rgba(255,255,255,0.9)",
+                  mb: 4
+                }}
+              >
+                Joueurs connectés : {players.length}
+              </Typography>
+              
+              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center", mb: 4 }}>
+                {players.map((player, index) => (
+                  <Zoom in timeout={500 + index * 200} key={player.sid}>
+                    <Chip
+                      avatar={<Avatar>{player.name[0]}</Avatar>}
+                      label={player.name}
+                      sx={{
+                        background: "rgba(255,255,255,0.2)",
+                        color: "white",
+                        backdropFilter: "blur(10px)",
+                        border: "1px solid rgba(255,255,255,0.3)",
+                      }}
+                    />
+                  </Zoom>
+                ))}
+              </Box>
+
+              <Grow in timeout={1500}>
+                <Button 
+                  variant="contained" 
+                  onClick={handleStartGame} 
+                  size="large"
+                  sx={{
+                    background: "linear-gradient(45deg, #4CAF50 30%, #45a049 90%)",
+                    color: "white",
+                    fontSize: "1.2rem",
+                    padding: "12px 32px",
+                    borderRadius: "25px",
+                    boxShadow: "0 4px 15px rgba(76, 175, 80, 0.4)",
+                    "&:hover": {
+                      background: "linear-gradient(45deg, #45a049 30%, #4CAF50 90%)",
+                      boxShadow: "0 6px 20px rgba(76, 175, 80, 0.6)",
+                    },
+                  }}
+                >
+                  🚀 Démarrer le quiz
+                </Button>
+              </Grow>
+            </Box>
+          </Fade>
+        </Box>
+      </GradientBackground>
     );
   }
 
   if (currentView === "finished") {
     return (
-      <Box
-        sx={{
-          p: 3,
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h4" sx={{ mb: 4 }}>
-          Résultats finaux
-        </Typography>
-        <Paper sx={{ p: 3, width: "100%", maxWidth: 600 }}>
-          {Object.entries(scores).map(([playerId, score]) => {
-            const player = players.find((p) => p.sid === playerId);
-            return (
-              <Box
-                key={playerId}
-                sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
-              >
-                <Typography>{player?.name || `Joueur ${playerId}`}</Typography>
-                <Typography>{score} points</Typography>
-              </Box>
-            );
-          })}
-        </Paper>
-      </Box>
+      <Podium
+        currentView={currentView}
+        scores={scores}
+        players={players}
+        onReturnHome={handleReturnHome}
+      />
     );
   }
 
   if (currentView === "scoreboard") {
     return (
-      <Box
-        sx={{
-          p: 3,
-          height: "100vh",
-          display: "flex",
-          flexDirection: "column",
-          alignItems: "center",
-        }}
-      >
-        <Typography variant="h4" sx={{ mb: 4 }}>
-          Scores
-        </Typography>
-        <Paper sx={{ p: 3, width: "100%", maxWidth: 600 }}>
-          {Object.entries(scores).map(([playerId, score]) => {
-            const player = players.find((p) => p.sid === playerId);
-            return (
-              <Box
-                key={playerId}
-                sx={{ display: "flex", justifyContent: "space-between", mb: 2 }}
+      <GradientBackground>
+        <Box
+          sx={{
+            p: 4,
+            height: "100vh",
+            display: "flex",
+            flexDirection: "column",
+            alignItems: "center",
+            position: "relative",
+            zIndex: 2,
+          }}
+        >
+          <Fade in timeout={800}>
+            <Typography 
+              variant="h3" 
+              sx={{ 
+                mb: 4, 
+                color: "white",
+                fontWeight: "bold",
+                textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
+              }}
+            >
+              📊 Scores
+            </Typography>
+          </Fade>
+          
+          <Slide direction="up" in timeout={1000}>
+            <Paper 
+              sx={{ 
+                p: 4, 
+                width: "100%", 
+                maxWidth: 600,
+                background: "rgba(255,255,255,0.95)",
+                backdropFilter: "blur(10px)",
+                borderRadius: 3,
+                boxShadow: "0 8px 32px rgba(0,0,0,0.1)",
+              }}
+            >
+              {Object.entries(scores).map(([playerId, score], index) => {
+                const player = players.find((p) => p.sid === playerId);
+                return (
+                  <Grow in timeout={500 + index * 200} key={playerId}>
+                    <Box
+                      sx={{
+                        display: "flex",
+                        justifyContent: "space-between",
+                        alignItems: "center",
+                        mb: 3,
+                        p: 2,
+                        borderRadius: 2,
+                        background: index === 0 
+                          ? "linear-gradient(45deg, #FFD700, #FFA500)"
+                          : index === 1
+                          ? "linear-gradient(45deg, #C0C0C0, #A9A9A9)"
+                          : index === 2
+                          ? "linear-gradient(45deg, #CD7F32, #B8860B)"
+                          : "rgba(0,0,0,0.05)",
+                        boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
+                      }}
+                    >
+                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
+                        <Avatar sx={{ 
+                          bgcolor: index === 0 ? "#FFD700" : index === 1 ? "#C0C0C0" : "#CD7F32",
+                          color: "white",
+                          fontWeight: "bold"
+                        }}>
+                          {index + 1}
+                        </Avatar>
+                        <Typography variant="h6" fontWeight="bold">
+                          {player?.name || `Joueur ${playerId}`}
+                        </Typography>
+                      </Box>
+                      <Typography variant="h5" fontWeight="bold" color="primary">
+                        {score} pts
+                      </Typography>
+                    </Box>
+                  </Grow>
+                );
+              })}
+            </Paper>
+          </Slide>
+          
+          {isHost && (
+            <Grow in timeout={2000}>
+              <Button 
+                variant="contained" 
+                onClick={handleNextQuestion} 
+                size="large"
+                sx={{
+                  mt: 4,
+                  background: "linear-gradient(45deg, #2196F3 30%, #1976D2 90%)",
+                  color: "white",
+                  fontSize: "1.1rem",
+                  padding: "12px 28px",
+                  borderRadius: "25px",
+                  boxShadow: "0 4px 15px rgba(33, 150, 243, 0.4)",
+                  "&:hover": {
+                    background: "linear-gradient(45deg, #1976D2 30%, #2196F3 90%)",
+                    boxShadow: "0 6px 20px rgba(33, 150, 243, 0.6)",
+                  },
+                }}
               >
-                <Typography>{player?.name || `Joueur ${playerId}`}</Typography>
-                <Typography>{score} points</Typography>
-              </Box>
-            );
-          })}
-        </Paper>
-      </Box>
+                ➡️ Question suivante
+              </Button>
+            </Grow>
+          )}
+        </Box>
+      </GradientBackground>
     );
   }
 
@@ -272,13 +533,15 @@ const QuizzClient = () => {
     { color: "#f3a712", text: currentQuestionData.options[3] },
   ];
 
-  if (selectedColor) {
+  if (selectedColor && showAnswerFeedback && !isHost) {
     return (
       <Box
         sx={{
           height: "100vh",
           width: "100vw",
-          backgroundColor: selectedColor,
+          background: selectedColor === "default" 
+            ? "linear-gradient(135deg, #f44336 0%, #d32f2f 100%)"
+            : `linear-gradient(135deg, ${selectedColor} 0%, ${selectedColor}dd 100%)`,
           margin: 0,
           padding: 0,
           position: "fixed",
@@ -287,81 +550,145 @@ const QuizzClient = () => {
           right: 0,
           bottom: 0,
           display: "flex",
+          flexDirection: "column",
           justifyContent: "center",
           alignItems: "center",
+          zIndex: 1000,
         }}
       >
-        <Typography
-          variant="h4"
-          sx={{ color: "white", textShadow: "2px 2px 4px rgba(0,0,0,0.5)" }}
-        >
-          Réponse enregistrée
-        </Typography>
+        <Zoom in timeout={500}>
+          <Box sx={{ textAlign: "center" }}>
+            <Typography
+              variant="h2"
+              sx={{ 
+                color: "white", 
+                textShadow: "2px 2px 8px rgba(0,0,0,0.5)",
+                mb: 2,
+                fontWeight: "bold"
+              }}
+            >
+              {selectedColor === "default" ? "⏰ Temps écoulé !" : "✅ Réponse enregistrée !"}
+            </Typography>
+            <Typography
+              variant="h5"
+              sx={{ 
+                color: "rgba(255,255,255,0.9)",
+                textShadow: "1px 1px 4px rgba(0,0,0,0.3)"
+              }}
+            >
+              {selectedColor === "default" 
+                ? "Aucune réponse sélectionnée" 
+                : "En attente des autres joueurs..."
+              }
+            </Typography>
+          </Box>
+        </Zoom>
       </Box>
     );
   }
 
   return (
-    <Box
-      sx={{
-        height: "100vh",
-        width: "100vw",
-        backgroundColor: "#F4BBD3",
-        margin: 0,
-        padding: 2.5,
-        boxSizing: "border-box",
-        display: "flex",
-        flexDirection: "column",
-        gap: 2,
-      }}
-    >
-      <Typography
-        variant="h4"
-        sx={{
-          textAlign: "center",
-          color: "white",
-          textShadow: "2px 2px 4px rgba(0,0,0,0.3)",
-        }}
-      >
-        {currentQuestionData.question}
-      </Typography>
+    <GradientBackground>
       <Box
         sx={{
-          display: "grid",
-          gridTemplateColumns: "1fr 1fr",
-          gridTemplateRows: "1fr 1fr",
-          gap: "20px",
-          flex: 1,
+          height: "100vh",
+          width: "100vw",
+          margin: 0,
+          padding: 3,
+          boxSizing: "border-box",
+          display: "flex",
+          flexDirection: "column",
+          gap: 3,
+          position: "relative",
+          zIndex: 2,
         }}
       >
-        {answers.map((answer, index) => (
-          <Card
-            key={index}
-            onClick={() => handleAnswerClick(answer.color)}
-            sx={{
-              bgcolor: answer.color,
-              width: "100%",
-              height: "100%",
-              cursor: "pointer",
-              transition: "transform 0.2s",
-              display: "flex",
-              justifyContent: "center",
-              alignItems: "center",
-              "&:hover": {
-                transform: "scale(1.02)",
-              },
-            }}
-          >
+        {/* Header avec timer */}
+        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+          <Fade in timeout={800}>
+            <Typography
+              variant="h4"
+              sx={{
+                color: "white",
+                textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
+                fontWeight: "bold",
+                flex: 1,
+                textAlign: "center",
+              }}
+            >
+              {isHost ? currentQuestionData.question : "Question en cours..."}
+            </Typography>
+          </Fade>
+          
+          <Box sx={{ minWidth: 120 }}>
+            <LinearProgress
+              variant="determinate"
+              value={(timeLeft / defaultTimer) * 100}
+              sx={{
+                height: 8,
+                borderRadius: 4,
+                backgroundColor: "rgba(255,255,255,0.3)",
+                "& .MuiLinearProgress-bar": {
+                  background: timeLeft > 5 ? "linear-gradient(45deg, #4CAF50, #45a049)" : "linear-gradient(45deg, #f44336, #d32f2f)",
+                },
+              }}
+            />
             <Typography
               variant="h6"
-              sx={{ color: "white", textShadow: "2px 2px 4px rgba(0,0,0,0.3)" }}
+              sx={{
+                color: "white",
+                textAlign: "center",
+                mt: 1,
+                fontWeight: "bold",
+                textShadow: "1px 1px 4px rgba(0,0,0,0.3)",
+              }}
             >
-              {answer.text}
+              {timeLeft}s
             </Typography>
-          </Card>
-        ))}
+          </Box>
+        </Box>
+
+        {/* Grille des réponses */}
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: "1fr 1fr",
+            gridTemplateRows: "1fr 1fr",
+            gap: 3,
+            flex: 1,
+          }}
+        >
+          {answers.map((answer, index) => (
+            <Zoom in timeout={500 + index * 200} key={index}>
+              <AnswerCard
+                onClick={() => handleAnswerClick(answer.text)}
+                selected={selectedColor === answer.text}
+                sx={{
+                  background: `linear-gradient(135deg, ${answer.color} 0%, ${answer.color}dd 100%)`,
+                  display: "flex",
+                  justifyContent: "center",
+                  alignItems: "center",
+                  position: "relative",
+                }}
+              >
+                <Typography
+                  variant="h5"
+                  sx={{ 
+                    color: "white", 
+                    textShadow: "2px 2px 8px rgba(0,0,0,0.5)",
+                    fontWeight: "bold",
+                    textAlign: "center",
+                    zIndex: 2,
+                  }}
+                >
+                  {isHost ? answer.text : ""}
+                </Typography>
+              </AnswerCard>
+            </Zoom>
+          ))}
+        </Box>
       </Box>
-    </Box>
+    </GradientBackground>
   );
 };
 

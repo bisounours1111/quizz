@@ -1,5 +1,0 @@
-{
-  "dependencies": {
-    "@types/socket.io-client": "^1.4.36"
-  }
-}
