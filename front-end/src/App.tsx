@@ -10,7 +10,6 @@ import QuizzHost from "./pages/QuizzHost";
 import QuizzClient from "./pages/QuizzClient";
 import LobbyGame from "./pages/LobbyGame";
 import io from "socket.io-client";
-import { Box } from "@mui/material";
 
 // Configuration de l'URL du serveur Socket.IO
 export const SOCKET_URL = "http://127.0.0.1:3000";

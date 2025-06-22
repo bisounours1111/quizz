@@ -50,68 +50,7 @@ players = {}
 # Structure pour stocker les réponses des joueurs
 player_answers = {}
 
-# Liste des QCM disponibles (à remplacer par une vraie base de données plus tard)
-available_quizzes = [
-    {
-        'id': '1',
-        'title': 'Culture Générale',
-        'description': 'Testez vos connaissances générales',
-        'questions': [
-            {
-                'question': 'Quelle est la capitale de la France ?',
-                'options': ['Lyon', 'Paris', 'Marseille', 'Bordeaux'],
-                'correctAnswer': 1
-            },
-            {
-                'question': 'Quel est le plus grand océan du monde ?',
-                'options': ['Océan Atlantique', 'Océan Pacifique', 'Océan Indien', 'Océan Arctique'],
-                'correctAnswer': 1
-            },
-            {
-                'question': 'Combien de planètes y a-t-il dans notre système solaire ?',
-                'options': ['7', '8', '9', '10'],
-                'correctAnswer': 1
-            },
-            {
-                'question': 'Quel est le plus grand désert du monde ?',
-                'options': ['Désert du Sahara', 'Désert d\'Arabie', 'Désert de Gobi', 'Désert d\'Antarctique'],
-                'correctAnswer': 0
-            }
-        ]
-    },
-    {
-        'id': '2',
-        'title': 'Histoire',
-        'description': 'Questions sur l\'histoire mondiale',
-        'questions': [
-            {
-                'question': 'En quelle année a eu lieu la Révolution française ?',
-                'options': ['1789', '1792', '1799', '1804'],
-                'correctAnswer': 0
-            },
-            {
-                'question': 'En quelle année s\'est déroulée la bataille de Waterloo ?',
-                'options': ['1815', '1812', '1805', '1800'],
-                'correctAnswer': 0
-            },
-            {
-                'question': 'Qui était le premier empereur romain ?',
-                'options': ['Jules César', 'Auguste', 'Néron', 'Caligula'],
-                'correctAnswer': 1
-            },
-            {
-                'question': 'En quelle année Christophe Colomb a-t-il découvert l\'Amérique ?',
-                'options': ['1492', '1498', '1500', '1502'],
-                'correctAnswer': 0
-            },
-            {
-                'question': 'Quel roi de France était surnommé le Roi Soleil ?',
-                'options': ['Louis XIII', 'Louis XIV', 'Louis XV', 'Louis XVI'],
-                'correctAnswer': 1
-            }
-        ]
-    }
-]
+available_quizzes = json.load(open('questions.json', 'r', encoding='utf-8'))
 
 @app.route('/api/quizzes', methods=['GET'])
 def get_quizzes():
