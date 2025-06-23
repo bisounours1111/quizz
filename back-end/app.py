@@ -403,7 +403,7 @@ def handle_player_answer(data):
             print(correct_answer)
            
             if player_answer == correct_answer:
-                rooms[room_id]['scoreboard'][player_sid] = (rooms[room_id]['scoreboard'][player_sid] or 0) + 1
+                rooms[room_id]['scoreboard'][player_sid] = (rooms[room_id]['scoreboard'][player_sid] or 0) + round(10 * (rooms[room_id]['settings']['responseTime'] - response_time))
             else:
                 rooms[room_id]['scoreboard'][player_sid] = (rooms[room_id]['scoreboard'][player_sid] or 0)
 
