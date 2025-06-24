@@ -37,7 +37,8 @@ const StyledCard = styled(Card)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+    background:
+      "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
     zIndex: 1,
   },
 }));
@@ -53,36 +54,42 @@ const GradientBackground = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"10\" cy=\"60\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"90\" cy=\"40\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>')",
+    background:
+      'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>\')',
     opacity: 0.3,
   },
 }));
 
-const AnswerCard = styled(Card)<{ selected?: boolean }>(({ theme, selected }) => ({
-  background: selected ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
-  backdropFilter: "blur(10px)",
-  border: selected ? "2px solid rgba(255,255,255,0.8)" : "1px solid rgba(255,255,255,0.2)",
-  cursor: "pointer",
-  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  position: "relative",
-  overflow: "hidden",
-  "&:hover": {
-    transform: "scale(1.05)",
-    boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
-    background: "rgba(255,255,255,0.15)",
-    border: "2px solid rgba(255,255,255,0.6)",
-  },
-  "&::before": {
-    content: '""',
-    position: "absolute",
-    top: 0,
-    left: 0,
-    right: 0,
-    bottom: 0,
-    background: "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
-    zIndex: 1,
-  },
-}));
+const AnswerCard = styled(Card)<{ selected?: boolean }>(
+  ({ theme, selected }) => ({
+    background: selected ? "rgba(255,255,255,0.2)" : "rgba(255,255,255,0.1)",
+    backdropFilter: "blur(10px)",
+    border: selected
+      ? "2px solid rgba(255,255,255,0.8)"
+      : "1px solid rgba(255,255,255,0.2)",
+    cursor: "pointer",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    position: "relative",
+    overflow: "hidden",
+    "&:hover": {
+      transform: "scale(1.05)",
+      boxShadow: "0 8px 25px rgba(0,0,0,0.3)",
+      background: "rgba(255,255,255,0.15)",
+      border: "2px solid rgba(255,255,255,0.6)",
+    },
+    "&::before": {
+      content: '""',
+      position: "absolute",
+      top: 0,
+      left: 0,
+      right: 0,
+      bottom: 0,
+      background:
+        "linear-gradient(45deg, rgba(255,255,255,0.1) 0%, rgba(255,255,255,0.05) 100%)",
+      zIndex: 1,
+    },
+  })
+);
 
 interface Quiz {
   id: string;
@@ -143,12 +150,12 @@ const QuizzClient = () => {
     const updateSocketId = () => {
       socketIdRef.current = socket.id;
     };
-    
+
     updateSocketId();
-    socket.on('connect', updateSocketId);
-    
+    socket.on("connect", updateSocketId);
+
     return () => {
-      socket.off('connect', updateSocketId);
+      socket.off("connect", updateSocketId);
     };
   }, []);
 
@@ -160,7 +167,7 @@ const QuizzClient = () => {
     const fetchQuiz = async () => {
       try {
         const roomResponse = await axios.get(
-          `http://localhost:3000/api/rooms/${roomId}`
+          `http://89.157.254.92:3001/api/rooms/${roomId}`
         );
         const selectedQuizId = roomResponse.data.selected_quiz?.id;
         const currentSocketId = socketIdRef.current || socket.id;
@@ -170,7 +177,7 @@ const QuizzClient = () => {
 
         if (selectedQuizId) {
           const quizResponse = await axios.get(
-            `http://localhost:3000/api/quizzes`
+            `http://89.157.254.92:3001/api/quizzes`
           );
           const selectedQuiz = quizResponse.data.find(
             (q: Quiz) => q.id === selectedQuizId
@@ -197,18 +204,21 @@ const QuizzClient = () => {
       setPlayers(data.players || []);
     });
 
-    socket.on("all_players_answered", (data: { 
-      scoreboard: { [key: string]: number };
-      correct_answer: string;
-      current_question: any;
-    }) => {
-      setScores(data.scoreboard);
-      setCorrectAnswer(data.correct_answer);
-      setQuestionData(data.current_question);
-      setCurrentView("scoreboard");
-      console.log(data.scoreboard);
-      console.log("Is Host (from ref):", isHostRef.current);
-    });
+    socket.on(
+      "all_players_answered",
+      (data: {
+        scoreboard: { [key: string]: number };
+        correct_answer: string;
+        current_question: any;
+      }) => {
+        setScores(data.scoreboard);
+        setCorrectAnswer(data.correct_answer);
+        setQuestionData(data.current_question);
+        setCurrentView("scoreboard");
+        console.log(data.scoreboard);
+        console.log("Is Host (from ref):", isHostRef.current);
+      }
+    );
 
     socket.on("next_question", () => {
       setCurrentView("quiz");
@@ -290,7 +300,6 @@ const QuizzClient = () => {
       setSelectedColor(color);
       setShowAnswerFeedback(true);
       setTimeLeft(defaultTimer);
-      
     }
   };
 
@@ -345,28 +354,36 @@ const QuizzClient = () => {
         >
           <Fade in timeout={1000}>
             <Box sx={{ textAlign: "center" }}>
-              <Typography 
-                variant="h2" 
-                sx={{ 
-                  color: "white", 
+              <Typography
+                variant="h2"
+                sx={{
+                  color: "white",
                   fontWeight: "bold",
                   textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
-                  mb: 2
+                  mb: 2,
                 }}
               >
                 🎮 Lobby
               </Typography>
-              <Typography 
-                variant="h5" 
-                sx={{ 
+              <Typography
+                variant="h5"
+                sx={{
                   color: "rgba(255,255,255,0.9)",
-                  mb: 4
+                  mb: 4,
                 }}
               >
                 Joueurs connectés : {players.length}
               </Typography>
-              
-              <Box sx={{ display: "flex", gap: 2, flexWrap: "wrap", justifyContent: "center", mb: 4 }}>
+
+              <Box
+                sx={{
+                  display: "flex",
+                  gap: 2,
+                  flexWrap: "wrap",
+                  justifyContent: "center",
+                  mb: 4,
+                }}
+              >
                 {players.map((player, index) => (
                   <Zoom in timeout={500 + index * 200} key={player.sid}>
                     <Chip
@@ -384,19 +401,21 @@ const QuizzClient = () => {
               </Box>
 
               <Grow in timeout={1500}>
-                <Button 
-                  variant="contained" 
-                  onClick={handleStartGame} 
+                <Button
+                  variant="contained"
+                  onClick={handleStartGame}
                   size="large"
                   sx={{
-                    background: "linear-gradient(45deg, #4CAF50 30%, #45a049 90%)",
+                    background:
+                      "linear-gradient(45deg, #4CAF50 30%, #45a049 90%)",
                     color: "white",
                     fontSize: "1.2rem",
                     padding: "12px 32px",
                     borderRadius: "25px",
                     boxShadow: "0 4px 15px rgba(76, 175, 80, 0.4)",
                     "&:hover": {
-                      background: "linear-gradient(45deg, #45a049 30%, #4CAF50 90%)",
+                      background:
+                        "linear-gradient(45deg, #45a049 30%, #4CAF50 90%)",
                       boxShadow: "0 6px 20px rgba(76, 175, 80, 0.6)",
                     },
                   }}
@@ -437,10 +456,10 @@ const QuizzClient = () => {
           }}
         >
           <Fade in timeout={800}>
-            <Typography 
-              variant="h3" 
-              sx={{ 
-                mb: 4, 
+            <Typography
+              variant="h3"
+              sx={{
+                mb: 4,
                 color: "white",
                 fontWeight: "bold",
                 textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
@@ -449,14 +468,14 @@ const QuizzClient = () => {
               📊 Scores
             </Typography>
           </Fade>
-          
+
           {/* Affichage de la bonne réponse */}
           {correctAnswer && questionData && (
             <Slide direction="down" in timeout={1200}>
-              <Paper 
-                sx={{ 
-                  p: 3, 
-                  width: "100%", 
+              <Paper
+                sx={{
+                  p: 3,
+                  width: "100%",
                   maxWidth: 600,
                   background: "rgba(76, 175, 80, 0.95)",
                   backdropFilter: "blur(10px)",
@@ -467,10 +486,10 @@ const QuizzClient = () => {
                 }}
               >
                 <Box sx={{ textAlign: "center" }}>
-                  <Typography 
-                    variant="h6" 
-                    sx={{ 
-                      color: "white", 
+                  <Typography
+                    variant="h6"
+                    sx={{
+                      color: "white",
                       mb: 2,
                       fontWeight: "bold",
                       textShadow: "1px 1px 4px rgba(0,0,0,0.3)",
@@ -478,9 +497,9 @@ const QuizzClient = () => {
                   >
                     Question : {questionData.question}
                   </Typography>
-                  <Typography 
-                    variant="h5" 
-                    sx={{ 
+                  <Typography
+                    variant="h5"
+                    sx={{
                       color: "white",
                       fontWeight: "bold",
                       textShadow: "1px 1px 4px rgba(0,0,0,0.3)",
@@ -492,12 +511,12 @@ const QuizzClient = () => {
               </Paper>
             </Slide>
           )}
-          
+
           <Slide direction="up" in timeout={1000}>
-            <Paper 
-              sx={{ 
-                p: 4, 
-                width: "100%", 
+            <Paper
+              sx={{
+                p: 4,
+                width: "100%",
                 maxWidth: 600,
                 background: "rgba(255,255,255,0.95)",
                 backdropFilter: "blur(10px)",
@@ -517,29 +536,43 @@ const QuizzClient = () => {
                         mb: 3,
                         p: 2,
                         borderRadius: 2,
-                        background: index === 0 
-                          ? "linear-gradient(45deg, #FFD700, #FFA500)"
-                          : index === 1
-                          ? "linear-gradient(45deg, #C0C0C0, #A9A9A9)"
-                          : index === 2
-                          ? "linear-gradient(45deg, #CD7F32, #B8860B)"
-                          : "rgba(0,0,0,0.05)",
+                        background:
+                          index === 0
+                            ? "linear-gradient(45deg, #FFD700, #FFA500)"
+                            : index === 1
+                            ? "linear-gradient(45deg, #C0C0C0, #A9A9A9)"
+                            : index === 2
+                            ? "linear-gradient(45deg, #CD7F32, #B8860B)"
+                            : "rgba(0,0,0,0.05)",
                         boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                       }}
                     >
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                        <Avatar sx={{ 
-                          bgcolor: index === 0 ? "#FFD700" : index === 1 ? "#C0C0C0" : "#CD7F32",
-                          color: "white",
-                          fontWeight: "bold"
-                        }}>
+                      <Box
+                        sx={{ display: "flex", alignItems: "center", gap: 2 }}
+                      >
+                        <Avatar
+                          sx={{
+                            bgcolor:
+                              index === 0
+                                ? "#FFD700"
+                                : index === 1
+                                ? "#C0C0C0"
+                                : "#CD7F32",
+                            color: "white",
+                            fontWeight: "bold",
+                          }}
+                        >
                           {index + 1}
                         </Avatar>
                         <Typography variant="h6" fontWeight="bold">
                           {player?.name || `Joueur ${playerId}`}
                         </Typography>
                       </Box>
-                      <Typography variant="h5" fontWeight="bold" color="primary">
+                      <Typography
+                        variant="h5"
+                        fontWeight="bold"
+                        color="primary"
+                      >
                         {score} pts
                       </Typography>
                     </Box>
@@ -548,23 +581,25 @@ const QuizzClient = () => {
               })}
             </Paper>
           </Slide>
-          
+
           {isHost && (
             <Grow in timeout={2000}>
-              <Button 
-                variant="contained" 
-                onClick={handleNextQuestion} 
+              <Button
+                variant="contained"
+                onClick={handleNextQuestion}
                 size="large"
                 sx={{
                   mt: 4,
-                  background: "linear-gradient(45deg, #2196F3 30%, #1976D2 90%)",
+                  background:
+                    "linear-gradient(45deg, #2196F3 30%, #1976D2 90%)",
                   color: "white",
                   fontSize: "1.1rem",
                   padding: "12px 28px",
                   borderRadius: "25px",
                   boxShadow: "0 4px 15px rgba(33, 150, 243, 0.4)",
                   "&:hover": {
-                    background: "linear-gradient(45deg, #1976D2 30%, #2196F3 90%)",
+                    background:
+                      "linear-gradient(45deg, #1976D2 30%, #2196F3 90%)",
                     boxShadow: "0 6px 20px rgba(33, 150, 243, 0.6)",
                   },
                 }}
@@ -592,9 +627,10 @@ const QuizzClient = () => {
         sx={{
           height: "100vh",
           width: "100vw",
-          background: selectedColor === "default" 
-            ? "linear-gradient(135deg, #f44336 0%, #d32f2f 100%)"
-            : `linear-gradient(135deg, ${selectedColor} 0%, ${selectedColor}dd 100%)`,
+          background:
+            selectedColor === "default"
+              ? "linear-gradient(135deg, #f44336 0%, #d32f2f 100%)"
+              : `linear-gradient(135deg, ${selectedColor} 0%, ${selectedColor}dd 100%)`,
           margin: 0,
           padding: 0,
           position: "fixed",
@@ -613,26 +649,27 @@ const QuizzClient = () => {
           <Box sx={{ textAlign: "center" }}>
             <Typography
               variant="h2"
-              sx={{ 
-                color: "white", 
+              sx={{
+                color: "white",
                 textShadow: "2px 2px 8px rgba(0,0,0,0.5)",
                 mb: 2,
-                fontWeight: "bold"
+                fontWeight: "bold",
               }}
             >
-              {selectedColor === "default" ? "⏰ Temps écoulé !" : "✅ Réponse enregistrée !"}
+              {selectedColor === "default"
+                ? "⏰ Temps écoulé !"
+                : "✅ Réponse enregistrée !"}
             </Typography>
             <Typography
               variant="h5"
-              sx={{ 
+              sx={{
                 color: "rgba(255,255,255,0.9)",
-                textShadow: "1px 1px 4px rgba(0,0,0,0.3)"
+                textShadow: "1px 1px 4px rgba(0,0,0,0.3)",
               }}
             >
-              {selectedColor === "default" 
-                ? "Aucune réponse sélectionnée" 
-                : "En attente des autres joueurs..."
-              }
+              {selectedColor === "default"
+                ? "Aucune réponse sélectionnée"
+                : "En attente des autres joueurs..."}
             </Typography>
           </Box>
         </Zoom>
@@ -657,7 +694,13 @@ const QuizzClient = () => {
         }}
       >
         {/* Header avec timer */}
-        <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center" }}>
+        <Box
+          sx={{
+            display: "flex",
+            justifyContent: "space-between",
+            alignItems: "center",
+          }}
+        >
           <Fade in timeout={800}>
             <Typography
               variant="h4"
@@ -672,7 +715,7 @@ const QuizzClient = () => {
               {isHost ? currentQuestionData.question : "Question en cours..."}
             </Typography>
           </Fade>
-          
+
           <Box sx={{ minWidth: 120 }}>
             <LinearProgress
               variant="determinate"
@@ -682,7 +725,10 @@ const QuizzClient = () => {
                 borderRadius: 4,
                 backgroundColor: "rgba(255,255,255,0.3)",
                 "& .MuiLinearProgress-bar": {
-                  background: timeLeft > 5 ? "linear-gradient(45deg, #4CAF50, #45a049)" : "linear-gradient(45deg, #f44336, #d32f2f)",
+                  background:
+                    timeLeft > 5
+                      ? "linear-gradient(45deg, #4CAF50, #45a049)"
+                      : "linear-gradient(45deg, #f44336, #d32f2f)",
                 },
               }}
             />
@@ -726,8 +772,8 @@ const QuizzClient = () => {
               >
                 <Typography
                   variant="h5"
-                  sx={{ 
-                    color: "white", 
+                  sx={{
+                    color: "white",
                     textShadow: "2px 2px 8px rgba(0,0,0,0.5)",
                     fontWeight: "bold",
                     textAlign: "center",

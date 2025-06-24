@@ -12,7 +12,7 @@ import LobbyGame from "./pages/LobbyGame";
 import io from "socket.io-client";
 
 // Configuration de l'URL du serveur Socket.IO
-export const SOCKET_URL = "http://127.0.0.1:3000";
+export const SOCKET_URL = "http://89.157.254.92:3001";
 
 interface Player {
   id: string;
@@ -99,8 +99,7 @@ const LobbyGameWrapper = () => {
 function App() {
   return (
     <Router>
-      <Routes
-      >
+      <Routes>
         <Route path="/" element={<Lobby />} />
         <Route path="/lobby" element={<Lobby />} />
         <Route path="/lobby/:roomId" element={<Lobby />} />

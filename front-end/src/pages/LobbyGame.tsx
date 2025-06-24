@@ -46,7 +46,8 @@ const GradientBackground = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"10\" cy=\"60\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"90\" cy=\"40\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>')",
+    background:
+      'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>\')',
     opacity: 0.3,
   },
 }));
@@ -77,24 +78,28 @@ const StyledButton = styled(Button)(({ theme }) => ({
   },
 }));
 
-const QuizCard = styled(Paper)<{ selected?: boolean }>(({ theme, selected }) => ({
-  padding: theme.spacing(3),
-  cursor: "pointer",
-  borderRadius: 12,
-  background: selected 
-    ? "linear-gradient(135deg, #2196F3 0%, #1976D2 100%)" 
-    : "rgba(255,255,255,0.9)",
-  color: selected ? "white" : "inherit",
-  transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
-  border: selected ? "2px solid rgba(255,255,255,0.3)" : "1px solid rgba(0,0,0,0.1)",
-  "&:hover": {
-    transform: "translateY(-2px)",
-    boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
-    background: selected 
-      ? "linear-gradient(135deg, #1976D2 0%, #1565C0 100%)" 
-      : "rgba(255,255,255,1)",
-  },
-}));
+const QuizCard = styled(Paper)<{ selected?: boolean }>(
+  ({ theme, selected }) => ({
+    padding: theme.spacing(3),
+    cursor: "pointer",
+    borderRadius: 12,
+    background: selected
+      ? "linear-gradient(135deg, #2196F3 0%, #1976D2 100%)"
+      : "rgba(255,255,255,0.9)",
+    color: selected ? "white" : "inherit",
+    transition: "all 0.3s cubic-bezier(0.4, 0, 0.2, 1)",
+    border: selected
+      ? "2px solid rgba(255,255,255,0.3)"
+      : "1px solid rgba(0,0,0,0.1)",
+    "&:hover": {
+      transform: "translateY(-2px)",
+      boxShadow: "0 8px 25px rgba(0,0,0,0.15)",
+      background: selected
+        ? "linear-gradient(135deg, #1976D2 0%, #1565C0 100%)"
+        : "rgba(255,255,255,1)",
+    },
+  })
+);
 
 interface Player {
   id: string;
@@ -128,7 +133,7 @@ interface GameSettings {
   maxPlayers: number;
 }
 
-const API_URL = "http://localhost:3000/api";
+const API_URL = "http://89.157.254.92:3001/api";
 
 const LobbyGame = ({
   roomId = "",
@@ -175,7 +180,6 @@ const LobbyGame = ({
       try {
         const response = await axios.get(`${API_URL}/rooms/${roomId}`);
         const roomData = response.data;
-
 
         setSettings(roomData.settings);
         setSelectedQuiz(roomData.selected_quiz);
@@ -226,8 +230,7 @@ const LobbyGame = ({
   }, [isOwner]);
 
   useEffect(() => {
-    socket.on("connect", () => {
-    });
+    socket.on("connect", () => {});
 
     socket.on("settings_updated", (newSettings: GameSettings) => {
       setSettings(newSettings);
@@ -314,20 +317,20 @@ const LobbyGame = ({
     return (
       <GradientBackground>
         <Container maxWidth="md">
-          <Box 
-            sx={{ 
-              display: "flex", 
+          <Box
+            sx={{
+              display: "flex",
               flexDirection: "column",
-              justifyContent: "center", 
+              justifyContent: "center",
               alignItems: "center",
               minHeight: "100vh",
               gap: 3,
             }}
           >
             <Fade in timeout={1000}>
-              <Typography 
-                variant="h5" 
-                sx={{ 
+              <Typography
+                variant="h5"
+                sx={{
                   color: "white",
                   textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
                 }}
@@ -335,9 +338,9 @@ const LobbyGame = ({
                 Chargement des informations de la room...
               </Typography>
             </Fade>
-            <LinearProgress 
-              sx={{ 
-                width: "100%", 
+            <LinearProgress
+              sx={{
+                width: "100%",
                 maxWidth: 400,
                 height: 8,
                 borderRadius: 4,
@@ -345,7 +348,7 @@ const LobbyGame = ({
                 "& .MuiLinearProgress-bar": {
                   background: "linear-gradient(45deg, #4CAF50, #45a049)",
                 },
-              }} 
+              }}
             />
           </Box>
         </Container>
@@ -358,9 +361,9 @@ const LobbyGame = ({
       <Container maxWidth="lg" sx={{ py: 4, position: "relative", zIndex: 2 }}>
         <Fade in timeout={1000}>
           <Box sx={{ mb: 4, textAlign: "center" }}>
-            <Typography 
-              variant="h3" 
-              sx={{ 
+            <Typography
+              variant="h3"
+              sx={{
                 color: "white",
                 fontWeight: "bold",
                 textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
@@ -369,7 +372,14 @@ const LobbyGame = ({
             >
               🎮 Configuration de la partie
             </Typography>
-            <Box sx={{ display: "flex", alignItems: "center", justifyContent: "center", gap: 2 }}>
+            <Box
+              sx={{
+                display: "flex",
+                alignItems: "center",
+                justifyContent: "center",
+                gap: 2,
+              }}
+            >
               <Chip
                 label={`Code: ${roomId}`}
                 color="primary"
@@ -397,14 +407,23 @@ const LobbyGame = ({
               </IconButton>
             </Box>
             {copied && (
-              <Typography variant="body2" sx={{ color: "rgba(255,255,255,0.8)", mt: 1 }}>
+              <Typography
+                variant="body2"
+                sx={{ color: "rgba(255,255,255,0.8)", mt: 1 }}
+              >
                 Code copié !
               </Typography>
             )}
           </Box>
         </Fade>
 
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" }, gap: 4 }}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" },
+            gap: 4,
+          }}
+        >
           {/* Section principale */}
           <Slide direction="right" in timeout={1200}>
             <Box sx={{ display: "flex", flexDirection: "column", gap: 4 }}>
@@ -412,13 +431,28 @@ const LobbyGame = ({
               {isOwner && (
                 <StyledCard>
                   <CardContent sx={{ p: 4 }}>
-                    <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
-                      <QuizIcon sx={{ color: "primary.main", fontSize: "2rem" }} />
+                    <Box
+                      sx={{
+                        display: "flex",
+                        alignItems: "center",
+                        gap: 2,
+                        mb: 3,
+                      }}
+                    >
+                      <QuizIcon
+                        sx={{ color: "primary.main", fontSize: "2rem" }}
+                      />
                       <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                         Sélection du QCM
                       </Typography>
                     </Box>
-                    <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 2 }}>
+                    <Box
+                      sx={{
+                        display: "grid",
+                        gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                        gap: 2,
+                      }}
+                    >
                       {availableQuizzes.map((quiz, index) => (
                         <Grow in timeout={500 + index * 200} key={quiz.id}>
                           <QuizCard
@@ -426,7 +460,10 @@ const LobbyGame = ({
                             onClick={() => handleQuizSelection(quiz.id)}
                             elevation={selectedQuiz?.id === quiz.id ? 8 : 2}
                           >
-                            <Typography variant="h6" sx={{ fontWeight: "bold", mb: 1 }}>
+                            <Typography
+                              variant="h6"
+                              sx={{ fontWeight: "bold", mb: 1 }}
+                            >
                               {quiz.title}
                             </Typography>
                             <Typography variant="body2" sx={{ opacity: 0.8 }}>
@@ -435,12 +472,16 @@ const LobbyGame = ({
                             <Chip
                               label={`${quiz.questions.length} questions`}
                               size="small"
-                              sx={{ 
+                              sx={{
                                 mt: 2,
-                                background: selectedQuiz?.id === quiz.id 
-                                  ? "rgba(255,255,255,0.2)" 
-                                  : "rgba(0,0,0,0.1)",
-                                color: selectedQuiz?.id === quiz.id ? "white" : "inherit",
+                                background:
+                                  selectedQuiz?.id === quiz.id
+                                    ? "rgba(255,255,255,0.2)"
+                                    : "rgba(0,0,0,0.1)",
+                                color:
+                                  selectedQuiz?.id === quiz.id
+                                    ? "white"
+                                    : "inherit",
                               }}
                             />
                           </QuizCard>
@@ -456,13 +497,25 @@ const LobbyGame = ({
                 <Slide direction="up" in timeout={1400}>
                   <StyledCard>
                     <CardContent sx={{ p: 4 }}>
-                      <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
-                        <QuizIcon sx={{ color: "success.main", fontSize: "2rem" }} />
+                      <Box
+                        sx={{
+                          display: "flex",
+                          alignItems: "center",
+                          gap: 2,
+                          mb: 3,
+                        }}
+                      >
+                        <QuizIcon
+                          sx={{ color: "success.main", fontSize: "2rem" }}
+                        />
                         <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                           QCM sélectionné
                         </Typography>
                       </Box>
-                      <Typography variant="h6" sx={{ mb: 2, color: "primary.main" }}>
+                      <Typography
+                        variant="h6"
+                        sx={{ mb: 2, color: "primary.main" }}
+                      >
                         {selectedQuiz.title}
                       </Typography>
                       <Typography variant="body1" sx={{ mb: 3, opacity: 0.8 }}>
@@ -476,9 +529,11 @@ const LobbyGame = ({
                           onClick={handleStartGame}
                           disabled={players.length < 1}
                           sx={{
-                            background: "linear-gradient(45deg, #4CAF50 30%, #45a049 90%)",
+                            background:
+                              "linear-gradient(45deg, #4CAF50 30%, #45a049 90%)",
                             "&:hover": {
-                              background: "linear-gradient(45deg, #45a049 30%, #4CAF50 90%)",
+                              background:
+                                "linear-gradient(45deg, #45a049 30%, #4CAF50 90%)",
                             },
                             "&:disabled": {
                               background: "rgba(0,0,0,0.12)",
@@ -496,13 +551,28 @@ const LobbyGame = ({
               {/* Paramètres */}
               <StyledCard>
                 <CardContent sx={{ p: 4 }}>
-                  <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
-                    <SettingsIcon sx={{ color: "primary.main", fontSize: "2rem" }} />
+                  <Box
+                    sx={{
+                      display: "flex",
+                      alignItems: "center",
+                      gap: 2,
+                      mb: 3,
+                    }}
+                  >
+                    <SettingsIcon
+                      sx={{ color: "primary.main", fontSize: "2rem" }}
+                    />
                     <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                       Paramètres de la partie
                     </Typography>
                   </Box>
-                  <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" }, gap: 4 }}>
+                  <Box
+                    sx={{
+                      display: "grid",
+                      gridTemplateColumns: { xs: "1fr", md: "1fr 1fr" },
+                      gap: 4,
+                    }}
+                  >
                     <Box>
                       <Typography variant="h6" gutterBottom>
                         Temps de réponse: {settings.responseTime}s
@@ -517,10 +587,12 @@ const LobbyGame = ({
                         valueLabelDisplay="auto"
                         sx={{
                           "& .MuiSlider-track": {
-                            background: "linear-gradient(45deg, #2196F3, #1976D2)",
+                            background:
+                              "linear-gradient(45deg, #2196F3, #1976D2)",
                           },
                           "& .MuiSlider-thumb": {
-                            background: "linear-gradient(45deg, #2196F3, #1976D2)",
+                            background:
+                              "linear-gradient(45deg, #2196F3, #1976D2)",
                           },
                         }}
                       />
@@ -539,10 +611,12 @@ const LobbyGame = ({
                         valueLabelDisplay="auto"
                         sx={{
                           "& .MuiSlider-track": {
-                            background: "linear-gradient(45deg, #4CAF50, #45a049)",
+                            background:
+                              "linear-gradient(45deg, #4CAF50, #45a049)",
                           },
                           "& .MuiSlider-thumb": {
-                            background: "linear-gradient(45deg, #4CAF50, #45a049)",
+                            background:
+                              "linear-gradient(45deg, #4CAF50, #45a049)",
                           },
                         }}
                       />
@@ -557,7 +631,9 @@ const LobbyGame = ({
           <Slide direction="left" in timeout={1600}>
             <StyledCard>
               <CardContent sx={{ p: 4 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <GroupIcon sx={{ color: "primary.main", fontSize: "2rem" }} />
                   <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                     Joueurs ({players.length + 1}/{settings.maxPlayers})
@@ -581,12 +657,15 @@ const LobbyGame = ({
 
                 <List sx={{ p: 0 }}>
                   <Grow in timeout={800}>
-                    <ListItem sx={{ 
-                      background: "linear-gradient(135deg, #2196F3 0%, #1976D2 100%)",
-                      borderRadius: 2,
-                      mb: 2,
-                      color: "white",
-                    }}>
+                    <ListItem
+                      sx={{
+                        background:
+                          "linear-gradient(135deg, #2196F3 0%, #1976D2 100%)",
+                        borderRadius: 2,
+                        mb: 2,
+                        color: "white",
+                      }}
+                    >
                       <Avatar sx={{ mr: 2, bgcolor: "rgba(255,255,255,0.2)" }}>
                         👑
                       </Avatar>
@@ -596,13 +675,13 @@ const LobbyGame = ({
                       />
                     </ListItem>
                   </Grow>
-                  
+
                   {players
                     .filter((player) => player.id !== host.id)
                     .map((player, index) => (
                       <Grow in timeout={1000 + index * 200} key={player.id}>
-                        <ListItem 
-                          sx={{ 
+                        <ListItem
+                          sx={{
                             background: "rgba(0,0,0,0.02)",
                             borderRadius: 2,
                             mb: 1,
@@ -647,8 +726,8 @@ const LobbyGame = ({
           onClose={() => setError(null)}
           anchorOrigin={{ vertical: "top", horizontal: "center" }}
         >
-          <Alert 
-            severity="error" 
+          <Alert
+            severity="error"
             onClose={() => setError(null)}
             sx={{ width: "100%" }}
           >

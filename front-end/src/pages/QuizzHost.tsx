@@ -71,7 +71,8 @@ const GradientBackground = styled(Box)(({ theme }) => ({
     left: 0,
     right: 0,
     bottom: 0,
-    background: "url('data:image/svg+xml,<svg xmlns=\"http://www.w3.org/2000/svg\" viewBox=\"0 0 100 100\"><defs><pattern id=\"grain\" width=\"100\" height=\"100\" patternUnits=\"userSpaceOnUse\"><circle cx=\"25\" cy=\"25\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"75\" cy=\"75\" r=\"1\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"50\" cy=\"10\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"10\" cy=\"60\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/><circle cx=\"90\" cy=\"40\" r=\"0.5\" fill=\"rgba(255,255,255,0.1)\"/></pattern></defs><rect width=\"100\" height=\"100\" fill=\"url(%23grain)\"/></svg>')",
+    background:
+      'url(\'data:image/svg+xml,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><defs><pattern id="grain" width="100" height="100" patternUnits="userSpaceOnUse"><circle cx="25" cy="25" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="75" cy="75" r="1" fill="rgba(255,255,255,0.1)"/><circle cx="50" cy="10" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="10" cy="60" r="0.5" fill="rgba(255,255,255,0.1)"/><circle cx="90" cy="40" r="0.5" fill="rgba(255,255,255,0.1)"/></pattern></defs><rect width="100" height="100" fill="url(%23grain)"/></svg>\')',
     opacity: 0.3,
   },
 }));
@@ -114,19 +115,21 @@ const QuizzHost = () => {
   );
   const [scores, setScores] = useState<{ [key: string]: number }>({});
   const [gameFinished, setGameFinished] = useState(false);
-  const [players, setPlayers] = useState<Array<{ sid: string; name: string }>>([]);
+  const [players, setPlayers] = useState<Array<{ sid: string; name: string }>>(
+    []
+  );
 
   useEffect(() => {
     const fetchQuiz = async () => {
       try {
         const roomResponse = await axios.get(
-          `http://localhost:3000/api/rooms/${roomId}`
+          `http://89.157.254.92:3001/api/rooms/${roomId}`
         );
         const selectedQuizId = roomResponse.data.selected_quiz?.id;
 
         if (selectedQuizId) {
           const quizResponse = await axios.get(
-            `http://localhost:3000/api/quizzes`
+            `http://89.157.254.92:3001/api/quizzes`
           );
           const selectedQuiz = quizResponse.data.find(
             (q: Quiz) => q.id === selectedQuizId
@@ -230,9 +233,9 @@ const QuizzHost = () => {
           }}
         >
           <Fade in timeout={1000}>
-            <Typography 
-              variant="h5" 
-              sx={{ 
+            <Typography
+              variant="h5"
+              sx={{
                 color: "white",
                 textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
               }}
@@ -240,13 +243,13 @@ const QuizzHost = () => {
               {connectionStatus}
             </Typography>
           </Fade>
-          <CircularProgress 
-            sx={{ 
+          <CircularProgress
+            sx={{
               color: "white",
               "& .MuiCircularProgress-circle": {
                 strokeLinecap: "round",
               },
-            }} 
+            }}
           />
         </Box>
       </GradientBackground>
@@ -269,9 +272,9 @@ const QuizzHost = () => {
           }}
         >
           <Fade in timeout={1000}>
-            <Typography 
-              variant="h3" 
-              sx={{ 
+            <Typography
+              variant="h3"
+              sx={{
                 mb: 4,
                 color: "white",
                 fontWeight: "bold",
@@ -281,7 +284,7 @@ const QuizzHost = () => {
               🏆 Résultats finaux
             </Typography>
           </Fade>
-          
+
           <Slide direction="up" in timeout={1200}>
             <StyledCard sx={{ p: 4, width: "100%", maxWidth: 600 }}>
               {Object.entries(scores).map(([playerId, score], index) => (
@@ -294,22 +297,30 @@ const QuizzHost = () => {
                       mb: 3,
                       p: 2,
                       borderRadius: 2,
-                      background: index === 0 
-                        ? "linear-gradient(135deg, #FFD700, #FFA500)"
-                        : index === 1
-                        ? "linear-gradient(135deg, #C0C0C0, #A9A9A9)"
-                        : index === 2
-                        ? "linear-gradient(135deg, #CD7F32, #B8860B)"
-                        : "rgba(0,0,0,0.05)",
+                      background:
+                        index === 0
+                          ? "linear-gradient(135deg, #FFD700, #FFA500)"
+                          : index === 1
+                          ? "linear-gradient(135deg, #C0C0C0, #A9A9A9)"
+                          : index === 2
+                          ? "linear-gradient(135deg, #CD7F32, #B8860B)"
+                          : "rgba(0,0,0,0.05)",
                       boxShadow: "0 2px 8px rgba(0,0,0,0.1)",
                     }}
                   >
                     <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
-                      <Avatar sx={{ 
-                        bgcolor: index === 0 ? "#FFD700" : index === 1 ? "#C0C0C0" : "#CD7F32",
-                        color: "white",
-                        fontWeight: "bold"
-                      }}>
+                      <Avatar
+                        sx={{
+                          bgcolor:
+                            index === 0
+                              ? "#FFD700"
+                              : index === 1
+                              ? "#C0C0C0"
+                              : "#CD7F32",
+                          color: "white",
+                          fontWeight: "bold",
+                        }}
+                      >
                         {index + 1}
                       </Avatar>
                       <Typography variant="h6" fontWeight="bold">
@@ -346,10 +357,17 @@ const QuizzHost = () => {
         {/* Header avec timer et question */}
         <Fade in timeout={800}>
           <Box sx={{ mb: 4 }}>
-            <Box sx={{ display: "flex", justifyContent: "space-between", alignItems: "center", mb: 3 }}>
-              <Typography 
-                variant="h4" 
-                sx={{ 
+            <Box
+              sx={{
+                display: "flex",
+                justifyContent: "space-between",
+                alignItems: "center",
+                mb: 3,
+              }}
+            >
+              <Typography
+                variant="h4"
+                sx={{
                   color: "white",
                   fontWeight: "bold",
                   textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
@@ -357,7 +375,7 @@ const QuizzHost = () => {
               >
                 Question {currentQuestion + 1}/{quiz.questions.length}
               </Typography>
-              
+
               <Box sx={{ display: "flex", alignItems: "center", gap: 2 }}>
                 <TimerIcon sx={{ color: "white", fontSize: "2rem" }} />
                 <Box sx={{ minWidth: 120 }}>
@@ -369,7 +387,10 @@ const QuizzHost = () => {
                       borderRadius: 4,
                       backgroundColor: "rgba(255,255,255,0.3)",
                       "& .MuiLinearProgress-bar": {
-                        background: timeLeft > 10 ? "linear-gradient(45deg, #4CAF50, #45a049)" : "linear-gradient(45deg, #f44336, #d32f2f)",
+                        background:
+                          timeLeft > 10
+                            ? "linear-gradient(45deg, #4CAF50, #45a049)"
+                            : "linear-gradient(45deg, #f44336, #d32f2f)",
                       },
                     }}
                   />
@@ -388,10 +409,10 @@ const QuizzHost = () => {
                 </Box>
               </Box>
             </Box>
-            
-            <Typography 
-              variant="h3" 
-              sx={{ 
+
+            <Typography
+              variant="h3"
+              sx={{
                 color: "white",
                 textShadow: "2px 2px 8px rgba(0,0,0,0.3)",
                 textAlign: "center",
@@ -403,7 +424,14 @@ const QuizzHost = () => {
           </Box>
         </Fade>
 
-        <Box sx={{ display: "grid", gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" }, gap: 4, flex: 1 }}>
+        <Box
+          sx={{
+            display: "grid",
+            gridTemplateColumns: { xs: "1fr", lg: "2fr 1fr" },
+            gap: 4,
+            flex: 1,
+          }}
+        >
           {/* Options de réponse */}
           <Slide direction="right" in timeout={1000}>
             <StyledCard>
@@ -419,7 +447,8 @@ const QuizzHost = () => {
                           sx={{
                             p: 3,
                             borderRadius: 3,
-                            background: "linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)",
+                            background:
+                              "linear-gradient(135deg, #f5f5f5 0%, #e0e0e0 100%)",
                             border: "2px solid rgba(0,0,0,0.1)",
                             textAlign: "center",
                             cursor: "pointer",
@@ -434,12 +463,12 @@ const QuizzHost = () => {
                             {option}
                           </Typography>
                           {index === currentQuestionData.correctAnswer && (
-                            <CheckCircleIcon 
-                              sx={{ 
-                                color: "success.main", 
-                                fontSize: "2rem", 
-                                mt: 1 
-                              }} 
+                            <CheckCircleIcon
+                              sx={{
+                                color: "success.main",
+                                fontSize: "2rem",
+                                mt: 1,
+                              }}
                             />
                           )}
                         </Paper>
@@ -455,49 +484,70 @@ const QuizzHost = () => {
           <Slide direction="left" in timeout={1200}>
             <StyledCard>
               <CardContent sx={{ p: 4 }}>
-                <Box sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}>
+                <Box
+                  sx={{ display: "flex", alignItems: "center", gap: 2, mb: 3 }}
+                >
                   <GroupIcon sx={{ color: "primary.main", fontSize: "2rem" }} />
                   <Typography variant="h5" sx={{ fontWeight: "bold" }}>
                     Réponses des joueurs
                   </Typography>
                 </Box>
-                
+
                 {showScoreboard ? (
                   <Box>
-                    {Object.entries(playerAnswers).map(([playerId, answer], index) => (
-                      <Grow in timeout={500 + index * 200} key={playerId}>
-                        <Box
-                          sx={{
-                            display: "flex",
-                            alignItems: "center",
-                            gap: 2,
-                            mb: 2,
-                            p: 2,
-                            borderRadius: 2,
-                            background: "rgba(0,0,0,0.02)",
-                            border: "1px solid rgba(0,0,0,0.1)",
-                          }}
-                        >
-                          <Avatar sx={{ bgcolor: "primary.main" }}>
-                            {playerId[0]}
-                          </Avatar>
-                          <Box sx={{ flex: 1 }}>
-                            <Typography variant="body1" fontWeight="bold">
-                              Joueur {playerId}
-                            </Typography>
-                            <Typography variant="body2" color="text.secondary">
-                              {answer.answer} ({answer.response_time}s)
-                            </Typography>
+                    {Object.entries(playerAnswers).map(
+                      ([playerId, answer], index) => (
+                        <Grow in timeout={500 + index * 200} key={playerId}>
+                          <Box
+                            sx={{
+                              display: "flex",
+                              alignItems: "center",
+                              gap: 2,
+                              mb: 2,
+                              p: 2,
+                              borderRadius: 2,
+                              background: "rgba(0,0,0,0.02)",
+                              border: "1px solid rgba(0,0,0,0.1)",
+                            }}
+                          >
+                            <Avatar sx={{ bgcolor: "primary.main" }}>
+                              {playerId[0]}
+                            </Avatar>
+                            <Box sx={{ flex: 1 }}>
+                              <Typography variant="body1" fontWeight="bold">
+                                Joueur {playerId}
+                              </Typography>
+                              <Typography
+                                variant="body2"
+                                color="text.secondary"
+                              >
+                                {answer.answer} ({answer.response_time}s)
+                              </Typography>
+                            </Box>
+                            <Chip
+                              label={
+                                answer.answer ===
+                                currentQuestionData.options[
+                                  currentQuestionData.correctAnswer
+                                ]
+                                  ? "Correct"
+                                  : "Incorrect"
+                              }
+                              color={
+                                answer.answer ===
+                                currentQuestionData.options[
+                                  currentQuestionData.correctAnswer
+                                ]
+                                  ? "success"
+                                  : "error"
+                              }
+                              size="small"
+                            />
                           </Box>
-                          <Chip
-                            label={answer.answer === currentQuestionData.options[currentQuestionData.correctAnswer] ? "Correct" : "Incorrect"}
-                            color={answer.answer === currentQuestionData.options[currentQuestionData.correctAnswer] ? "success" : "error"}
-                            size="small"
-                          />
-                        </Box>
-                      </Grow>
-                    ))}
-                    
+                        </Grow>
+                      )
+                    )}
+
                     <Grow in timeout={1500}>
                       <StyledButton
                         variant="contained"
@@ -507,9 +557,11 @@ const QuizzHost = () => {
                         startIcon={<PlayArrowIcon />}
                         sx={{
                           mt: 3,
-                          background: "linear-gradient(45deg, #2196F3 30%, #1976D2 90%)",
+                          background:
+                            "linear-gradient(45deg, #2196F3 30%, #1976D2 90%)",
                           "&:hover": {
-                            background: "linear-gradient(45deg, #1976D2 30%, #2196F3 90%)",
+                            background:
+                              "linear-gradient(45deg, #1976D2 30%, #2196F3 90%)",
                           },
                         }}
                       >
@@ -519,16 +571,20 @@ const QuizzHost = () => {
                   </Box>
                 ) : (
                   <Box sx={{ textAlign: "center", py: 4 }}>
-                    <Typography variant="h6" color="text.secondary" sx={{ mb: 2 }}>
+                    <Typography
+                      variant="h6"
+                      color="text.secondary"
+                      sx={{ mb: 2 }}
+                    >
                       En attente des réponses...
                     </Typography>
-                    <CircularProgress 
-                      sx={{ 
+                    <CircularProgress
+                      sx={{
                         color: "primary.main",
                         "& .MuiCircularProgress-circle": {
                           strokeLinecap: "round",
                         },
-                      }} 
+                      }}
                     />
                   </Box>
                 )}
