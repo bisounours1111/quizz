@@ -1,289 +1,384 @@
 [
   {
-      "id": "1",
-      "title": "Culture Générale",
-      "description": "Testez vos connaissances générales",
-      "questions": [
-          {
-              "question": "Quelle est la capitale de la France ?",
-              "options": ["Lyon", "Paris", "Marseille", "Bordeaux"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel est le plus grand océan du monde ?",
-              "options": ["Océan Atlantique", "Océan Pacifique", "Océan Indien", "Océan Arctique"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Combien de planètes y a-t-il dans notre système solaire ?",
-              "options": ["7", "8", "9", "10"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel est le plus grand désert du monde ?",
-              "options": ["Désert du Sahara", "Désert d\"Arabie", "Désert de Gobi", "Désert d\"Antarctique"],
-              "correctAnswer": 0
-          }
-      ]
+    "id": "2",
+    "title": "Histoire",
+    "description": "Questions sur l\"histoire mondiale",
+    "questions": [
+      {
+        "question": "En quelle année a eu lieu la Révolution française ?",
+        "options": ["1789", "1792", "1799", "1804"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "En quelle année s\"est déroulée la bataille de Waterloo ?",
+        "options": ["1815", "1812", "1805", "1800"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Qui était le premier empereur romain ?",
+        "options": ["Jules César", "Auguste", "Néron", "Caligula"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "En quelle année Christophe Colomb a-t-il découvert l\"Amérique ?",
+        "options": ["1492", "1498", "1500", "1502"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel roi de France était surnommé le Roi Soleil ?",
+        "options": ["Louis XIII", "Louis XIV", "Louis XV", "Louis XVI"],
+        "correctAnswer": 1
+      }
+    ]
   },
   {
-      "id": "2",
-      "title": "Histoire",
-      "description": "Questions sur l\"histoire mondiale",
-      "questions": [
-          {
-              "question": "En quelle année a eu lieu la Révolution française ?",
-              "options": ["1789", "1792", "1799", "1804"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "En quelle année s\"est déroulée la bataille de Waterloo ?",
-              "options": ["1815", "1812", "1805", "1800"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Qui était le premier empereur romain ?",
-              "options": ["Jules César", "Auguste", "Néron", "Caligula"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "En quelle année Christophe Colomb a-t-il découvert l\"Amérique ?",
-              "options": ["1492", "1498", "1500", "1502"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel roi de France était surnommé le Roi Soleil ?",
-              "options": ["Louis XIII", "Louis XIV", "Louis XV", "Louis XVI"],
-              "correctAnswer": 1
-          }
-      ]
+    "id": "3",
+    "title": "Informatique & SQL",
+    "description": "Testez vos connaissances en programmation et bases de données",
+    "questions": [
+      {
+        "question": "Que signifie SQL ?",
+        "options": [
+          "Structured Query Language",
+          "Simple Query Language",
+          "Standard Query Language",
+          "System Query Language"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quelle commande SQL permet de récupérer des données ?",
+        "options": ["INSERT", "SELECT", "UPDATE", "DELETE"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel langage de programmation a été créé par Guido van Rossum ?",
+        "options": ["Java", "Python", "JavaScript", "C++"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Qu'est-ce qu'une clé primaire en SQL ?",
+        "options": [
+          "Une colonne qui peut être nulle",
+          "Une colonne qui identifie de manière unique chaque ligne",
+          "Une colonne qui référence une autre table",
+          "Une colonne de type texte"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel protocole est utilisé pour les sites web sécurisés ?",
+        "options": ["HTTP", "HTTPS", "FTP", "SMTP"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Qu'est-ce que le HTML ?",
+        "options": [
+          "Un langage de programmation",
+          "Un langage de balisage",
+          "Un protocole réseau",
+          "Un système d'exploitation"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quelle commande SQL permet d'ajouter une nouvelle ligne ?",
+        "options": ["SELECT", "INSERT", "UPDATE", "DELETE"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Qu'est-ce qu'un algorithme ?",
+        "options": [
+          "Un programme informatique",
+          "Une suite d'instructions pour résoudre un problème",
+          "Un langage de programmation",
+          "Un système d'exploitation"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel est le nom du créateur de Facebook ?",
+        "options": ["Bill Gates", "Mark Zuckerberg", "Steve Jobs", "Elon Musk"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Qu'est-ce qu'une API ?",
+        "options": [
+          "Un langage de programmation",
+          "Une interface de programmation d'application",
+          "Un système d'exploitation",
+          "Un protocole réseau"
+        ],
+        "correctAnswer": 1
+      }
+    ]
   },
   {
-      "id": "3",
-      "title": "Informatique & SQL",
-      "description": "Testez vos connaissances en programmation et bases de données",
-      "questions": [
-          {
-              "question": "Que signifie SQL ?",
-              "options": ["Structured Query Language", "Simple Query Language", "Standard Query Language", "System Query Language"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quelle commande SQL permet de récupérer des données ?",
-              "options": ["INSERT", "SELECT", "UPDATE", "DELETE"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel langage de programmation a été créé par Guido van Rossum ?",
-              "options": ["Java", "Python", "JavaScript", "C++"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Qu'est-ce qu'une clé primaire en SQL ?",
-              "options": ["Une colonne qui peut être nulle", "Une colonne qui identifie de manière unique chaque ligne", "Une colonne qui référence une autre table", "Une colonne de type texte"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel protocole est utilisé pour les sites web sécurisés ?",
-              "options": ["HTTP", "HTTPS", "FTP", "SMTP"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Qu'est-ce que le HTML ?",
-              "options": ["Un langage de programmation", "Un langage de balisage", "Un protocole réseau", "Un système d'exploitation"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quelle commande SQL permet d'ajouter une nouvelle ligne ?",
-              "options": ["SELECT", "INSERT", "UPDATE", "DELETE"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Qu'est-ce qu'un algorithme ?",
-              "options": ["Un programme informatique", "Une suite d'instructions pour résoudre un problème", "Un langage de programmation", "Un système d'exploitation"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel est le nom du créateur de Facebook ?",
-              "options": ["Bill Gates", "Mark Zuckerberg", "Steve Jobs", "Elon Musk"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Qu'est-ce qu'une API ?",
-              "options": ["Un langage de programmation", "Une interface de programmation d'application", "Un système d'exploitation", "Un protocole réseau"],
-              "correctAnswer": 1
-          }
-      ]
+    "id": "4",
+    "title": "Jeux Vidéo",
+    "description": "Testez vos connaissances sur l'univers du gaming",
+    "questions": [
+      {
+        "question": "Quel est le protagoniste principal de la série The Legend of Zelda ?",
+        "options": ["Mario", "Link", "Zelda", "Ganondorf"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "En quelle année est sorti le premier Super Mario Bros ?",
+        "options": ["1983", "1985", "1987", "1989"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel studio a développé Minecraft ?",
+        "options": ["Mojang", "Microsoft", "EA", "Ubisoft"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel est le nom du protagonistes de la série Grand Theft Auto V ?",
+        "options": [
+          "Michael De Santa",
+          "Franklin Clinton",
+          "Trevor Phillips",
+          "Tous les trois"
+        ],
+        "correctAnswer": 3
+      },
+      {
+        "question": "Quel jeu a popularisé le genre battle royale ?",
+        "options": ["Fortnite", "PUBG", "Apex Legends", "Call of Duty Warzone"],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel est le nom du créateur de Mario ?",
+        "options": [
+          "Shigeru Miyamoto",
+          "Hideo Kojima",
+          "Hidetaka Miyazaki",
+          "Yuji Horii"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel est le premier jeu vidéo commercialisé ?",
+        "options": ["Pong", "Space Invaders", "Pac-Man", "Donkey Kong"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel studio a développé The Witcher 3 ?",
+        "options": ["CD Projekt Red", "Bethesda", "Rockstar", "Ubisoft"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel est le nom du protagonistes de la série God of War ?",
+        "options": ["Kratos", "Zeus", "Ares", "Poseidon"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel jeu a introduit le concept de \"sandbox\" ?",
+        "options": ["GTA III", "Minecraft", "SimCity", "The Sims"],
+        "correctAnswer": 0
+      }
+    ]
   },
   {
-      "id": "4",
-      "title": "Jeux Vidéo",
-      "description": "Testez vos connaissances sur l'univers du gaming",
-      "questions": [
-          {
-              "question": "Quel est le protagoniste principal de la série The Legend of Zelda ?",
-              "options": ["Mario", "Link", "Zelda", "Ganondorf"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "En quelle année est sorti le premier Super Mario Bros ?",
-              "options": ["1983", "1985", "1987", "1989"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel studio a développé Minecraft ?",
-              "options": ["Mojang", "Microsoft", "EA", "Ubisoft"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel est le nom du protagonistes de la série Grand Theft Auto V ?",
-              "options": ["Michael De Santa", "Franklin Clinton", "Trevor Phillips", "Tous les trois"],
-              "correctAnswer": 3
-          },
-          {
-              "question": "Quel jeu a popularisé le genre battle royale ?",
-              "options": ["Fortnite", "PUBG", "Apex Legends", "Call of Duty Warzone"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel est le nom du créateur de Mario ?",
-              "options": ["Shigeru Miyamoto", "Hideo Kojima", "Hidetaka Miyazaki", "Yuji Horii"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel est le premier jeu vidéo commercialisé ?",
-              "options": ["Pong", "Space Invaders", "Pac-Man", "Donkey Kong"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel studio a développé The Witcher 3 ?",
-              "options": ["CD Projekt Red", "Bethesda", "Rockstar", "Ubisoft"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel est le nom du protagonistes de la série God of War ?",
-              "options": ["Kratos", "Zeus", "Ares", "Poseidon"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel jeu a introduit le concept de \"sandbox\" ?",
-              "options": ["GTA III", "Minecraft", "SimCity", "The Sims"],
-              "correctAnswer": 0
-          }
-      ]
+    "id": "5",
+    "title": "Influence & Réseaux Sociaux",
+    "description": "Questions sur l'industrie de l'influence et les réseaux sociaux",
+    "questions": [
+      {
+        "question": "Quel est le nom du fondateur d'Instagram ?",
+        "options": [
+          "Kevin Systrom",
+          "Mark Zuckerberg",
+          "Jack Dorsey",
+          "Evan Spiegel"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel réseau social utilise des \"stories\" qui disparaissent en 24h ?",
+        "options": ["Facebook", "Instagram", "Snapchat", "TikTok"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "Quel est le nom du fondateur de TikTok ?",
+        "options": [
+          "Zhang Yiming",
+          "Mark Zuckerberg",
+          "Jack Dorsey",
+          "Evan Spiegel"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel réseau social est spécialisé dans le professionnel ?",
+        "options": ["LinkedIn", "Facebook", "Instagram", "Twitter"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel réseau social utilise des \"tweets\" ?",
+        "options": ["Facebook", "Instagram", "X (Twitter)", "LinkedIn"],
+        "correctAnswer": 2
+      },
+      {
+        "question": "Quel réseau social a été racheté par Meta (Facebook) ?",
+        "options": ["Instagram", "Snapchat", "TikTok", "LinkedIn"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "En quelle année OnlyFans a-t-il été créé ?",
+        "options": ["2016", "2017", "2018", "2019"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel est le nom du fondateur de PornHub ?",
+        "options": [
+          "Fabian Thylmann",
+          "Stephane Manos",
+          "David Tassillo",
+          "Corey Price"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Qui est le premier youtuber français ?",
+        "options": ["Tibo Inshape", "Squeezie", "Cyprien", "Michou"],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel est le nom du fondateur de PornHub ?",
+        "options": [
+          "Fabian Thylmann",
+          "Stephane Manos",
+          "David Tassillo",
+          "Corey Price"
+        ],
+        "correctAnswer": 0
+      }
+    ]
   },
   {
-      "id": "5",
-      "title": "Influence & Réseaux Sociaux",
-      "description": "Questions sur l'industrie de l'influence et les réseaux sociaux",
-      "questions": [
-          {
-              "question": "Quel est le nom du fondateur d'Instagram ?",
-              "options": ["Kevin Systrom", "Mark Zuckerberg", "Jack Dorsey", "Evan Spiegel"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel réseau social utilise des \"stories\" qui disparaissent en 24h ?",
-              "options": ["Facebook", "Instagram", "Snapchat", "TikTok"],
-              "correctAnswer": 2
-          },
-          {
-              "question": "Quel est le nom du fondateur de TikTok ?",
-              "options": ["Zhang Yiming", "Mark Zuckerberg", "Jack Dorsey", "Evan Spiegel"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel réseau social est spécialisé dans le professionnel ?",
-              "options": ["LinkedIn", "Facebook", "Instagram", "Twitter"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel réseau social utilise des \"tweets\" ?",
-              "options": ["Facebook", "Instagram", "X (Twitter)", "LinkedIn"],
-              "correctAnswer": 2
-          },
-          {
-              "question": "Quel réseau social a été racheté par Meta (Facebook) ?",
-              "options": ["Instagram", "Snapchat", "TikTok", "LinkedIn"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "En quelle année OnlyFans a-t-il été créé ?",
-              "options": ["2016", "2017", "2018", "2019"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel est le nom du fondateur de PornHub ?",
-              "options": ["Fabian Thylmann", "Stephane Manos", "David Tassillo", "Corey Price"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Qui est le premier youtuber français ?",
-              "options": ["Tibo Inshape", "Squeezie", "Cyprien", "Michou"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel est le nom du fondateur de PornHub ?",
-              "options": ["Fabian Thylmann", "Stephane Manos", "David Tassillo", "Corey Price"],
-              "correctAnswer": 0
-          }
-      ]
+    "id": "6",
+    "title": "Films & Cinéma",
+    "description": "Testez vos connaissances sur le 7ème art",
+    "questions": [
+      {
+        "question": "Quel acteur a joué Iron Man dans l'univers Marvel ?",
+        "options": [
+          "Chris Evans",
+          "Robert Downey Jr.",
+          "Chris Hemsworth",
+          "Mark Ruffalo"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel est le réalisateur de Titanic ?",
+        "options": [
+          "Steven Spielberg",
+          "James Cameron",
+          "Christopher Nolan",
+          "Quentin Tarantino"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel film a remporté l'Oscar du meilleur film en 2024 ?",
+        "options": [
+          "Oppenheimer",
+          "Barbie",
+          "Killers of the Flower Moon",
+          "Poor Things"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel acteur a joué le Joker dans The Dark Knight ?",
+        "options": [
+          "Jared Leto",
+          "Joaquin Phoenix",
+          "Heath Ledger",
+          "Jack Nicholson"
+        ],
+        "correctAnswer": 2
+      },
+      {
+        "question": "Quel est le nom du réalisateur de Pulp Fiction ?",
+        "options": [
+          "Martin Scorsese",
+          "Quentin Tarantino",
+          "David Fincher",
+          "Christopher Nolan"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel film a été le plus rentable de l'histoire ?",
+        "options": [
+          "Titanic",
+          "Avatar",
+          "Avengers: Endgame",
+          "Star Wars: The Force Awakens"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel acteur a joué Luke Skywalker dans Star Wars ?",
+        "options": [
+          "Harrison Ford",
+          "Mark Hamill",
+          "Carrie Fisher",
+          "Alec Guinness"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel est le nom du réalisateur de Inception ?",
+        "options": [
+          "Christopher Nolan",
+          "Steven Spielberg",
+          "James Cameron",
+          "David Fincher"
+        ],
+        "correctAnswer": 0
+      },
+      {
+        "question": "Quel film a introduit le personnage de James Bond ?",
+        "options": [
+          "Goldfinger",
+          "Dr. No",
+          "From Russia with Love",
+          "Thunderball"
+        ],
+        "correctAnswer": 1
+      },
+      {
+        "question": "Quel acteur a joué le rôle principal dans Forrest Gump ?",
+        "options": [
+          "Tom Hanks",
+          "Robin Williams",
+          "Denzel Washington",
+          "Morgan Freeman"
+        ],
+        "correctAnswer": 0
+      }
+    ]
   },
   {
-      "id": "6",
-      "title": "Films & Cinéma",
-      "description": "Testez vos connaissances sur le 7ème art",
-      "questions": [
-          {
-              "question": "Quel acteur a joué Iron Man dans l'univers Marvel ?",
-              "options": ["Chris Evans", "Robert Downey Jr.", "Chris Hemsworth", "Mark Ruffalo"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel est le réalisateur de Titanic ?",
-              "options": ["Steven Spielberg", "James Cameron", "Christopher Nolan", "Quentin Tarantino"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel film a remporté l'Oscar du meilleur film en 2024 ?",
-              "options": ["Oppenheimer", "Barbie", "Killers of the Flower Moon", "Poor Things"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel acteur a joué le Joker dans The Dark Knight ?",
-              "options": ["Jared Leto", "Joaquin Phoenix", "Heath Ledger", "Jack Nicholson"],
-              "correctAnswer": 2
-          },
-          {
-              "question": "Quel est le nom du réalisateur de Pulp Fiction ?",
-              "options": ["Martin Scorsese", "Quentin Tarantino", "David Fincher", "Christopher Nolan"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel film a été le plus rentable de l'histoire ?",
-              "options": ["Titanic", "Avatar", "Avengers: Endgame", "Star Wars: The Force Awakens"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel acteur a joué Luke Skywalker dans Star Wars ?",
-              "options": ["Harrison Ford", "Mark Hamill", "Carrie Fisher", "Alec Guinness"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel est le nom du réalisateur de Inception ?",
-              "options": ["Christopher Nolan", "Steven Spielberg", "James Cameron", "David Fincher"],
-              "correctAnswer": 0
-          },
-          {
-              "question": "Quel film a introduit le personnage de James Bond ?",
-              "options": ["Goldfinger", "Dr. No", "From Russia with Love", "Thunderball"],
-              "correctAnswer": 1
-          },
-          {
-              "question": "Quel acteur a joué le rôle principal dans Forrest Gump ?",
-              "options": ["Tom Hanks", "Robin Williams", "Denzel Washington", "Morgan Freeman"],
-              "correctAnswer": 0
-          }
-      ]
+    "id": "7",
+    "title": "Musique",
+    "description": "Testez vos connaissances sur la musique",
+    "questions": [
+      {
+        "question": "Quel est le nom du fondateur de Spotify ?",
+        "options": [
+          "Daniel Ek",
+          "Evan Spiegel",
+          "Jack Dorsey",
+          "Mark Zuckerberg"
+        ],
+        "correctAnswer": 0
+      }
+    ]
   }
 ]
